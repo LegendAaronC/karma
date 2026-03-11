@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Karma | The best menu for Blooket</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <style>
+    :root {
+      --bg-1: #000;
+      --accent1: #ff6b6b;
+      --accent2: #ff2f4b;
+      --panel: #181818;
+      --muted: #cfcfcf88;
+      --glass: rgba(255,255,255,0.04);
+    }
+    html, body {
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+      background: var(--bg-1);
+      color: #fff;
+      overflow: hidden;
+    }
+    .wave-wrap {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      background: linear-gradient(180deg, #1b0d12 0%, #230b10 40%, #111 100%);
+      overflow: hidden;
+    }
+    svg.wave {
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      width: 200%;
+      height: 150%;
+      transform: translateX(-25%);
+      opacity: 0.95;
+    }
+    .wave .wave-layer {
+      mix-blend-mode: screen;
+      opacity: 0.6;
+    }
+    #loading-screen {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: #000;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      font-size: 1.2em;
+      text-align: center;
+    }
+    #loading-text {
+      margin-bottom: 20px;
+      color: var(--accent1);
+      text-shadow: 0 0 10px var(--accent1);
+    }
+    #loading-bar-container {
+      width: 80%;
+      height: 12px;
+      background: #222;
+      border: 1px solid var(--accent2);
+      border-radius: 6px;
+      overflow: hidden;
+      box-shadow: 0 0 10px var(--accent2);
+    }
+    #loading-bar {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, var(--accent1), var(--accent2));
+      transition: width 0.4s ease-in-out;
+    }
+#copy-menu {
+  position: fixed;
+  top: 100px;
+  left: 100px;
+  width: 320px;
+  padding: 20px;
+  background: rgba(255,255,255,0.08);
+  backdrop-filter: blur(12px);
+  border-radius: 12px;
+  box-shadow: 0 0 20px rgba(0,0,0,0.3);
+  color: #fff;
+  font-family: sans-serif;
+  z-index: 99999;
+  cursor: move;
+}
+#copy-menu h3 {
+  margin: 0 0 10px;
+  font-size: 18px;
+}
+#copy-menu textarea {
+  width: 100%;
+  height: 60px;
+  resize: none;
+  border: none;
+  border-radius: 6px;
+  padding: 10px;
+  font-size: 12px;
+  background: rgba(0,0,0,0.2);
+  color: #0ff;
+}
+#copy-menu button {
+  margin-top: 10px;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 6px;
+  background: #0ff;
+  color: #000;
+  font-weight: bold;
+  cursor: pointer;
+}
+    .page {
+      position: relative;
+      z-index: 10;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 48px 20px;
+      text-align: center;
+    }
+    .top-text, .bottom-text {
+      font-size: 1.2em;
+      color: var(--muted);
+      margin: 20px;
+    }
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 20px;
+      max-width: 900px;
+      width: 100%;
+      padding: 20px;
+    }
+    .glass-row {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: wrap;
+  padding: 20px;
+}
+
+.glass-button {
+  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+  border-radius: 12px;
+  padding: 8px 16px;
+  box-shadow: 0 6px 20px rgba(0,0,0,.4);
+  backdrop-filter: blur(6px);
+  border: 1px solid var(--glass);
+  color: white;
+  font-size: 14px;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+.glass-button:hover {
+  transform: scale(1.05);
+}
+
+.glass-card {
+  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 10px 40px rgba(0,0,0,.6);
+  backdrop-filter: blur(6px);
+  border: 1px solid var(--glass);
+  width: 200px;
+  text-align: center;
+}
+
+.hover-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.hover-description {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(255,255,255,0.08);
+  backdrop-filter: blur(6px);
+  border-radius: 8px;
+  padding: 8px 12px;
+  color: var(--muted);
+  font-size: 12px;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+  margin-top: 6px;
+  z-index: 10;
+}
+
+.hover-wrapper:hover .hover-description {
+  opacity: 1;
+}
+
+.glass-card h2 {
+  margin: 0 0 10px;
+  color: var(--accent1);
+}
+
+.glass-card p {
+  margin: 0;
+  color: var(--muted);
+  </style>
+</head>
+<body>
+  <div class="wave-wrap" aria-hidden="true">
+    <svg class="wave" viewBox="0 0 1200 600" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="g1" x1="0" x2="1">
+          <stop offset="0" stop-color="#ff7b7b"></stop>
+          <stop offset="1" stop-color="#ff3a55"></stop>
+        </linearGradient>
+        <linearGradient id="g2" x1="0" x2="1">
+          <stop offset="0" stop-color="#ff5f7f"></stop>
+          <stop offset="1" stop-color="#ff2a4d"></stop>
+        </linearGradient>
+      </defs>
+      <g transform="translate(0,40)">
+        <path class="wave-layer" d="M0,200 C150,160 300,240 450,220 C600,200 750,120 900,160 C1050,200 1200,160 1350,180 L1350,600 L0,600 Z" fill="url(#g1)" opacity="0.55">
+          <animate attributeName="d" dur="8s" repeatCount="indefinite" values="M0,200 C150,160 300,240 450,220 C600,200 750,120 900,160 C1050,200 1200,160 1350,180 L1350,600 L0,600 Z;
+            M0,220 C150,200 300,160 450,200 C600,240 750,160 900,200 C1050,240 1200,200 1350,220 L1350,600 L0,600 Z;
+            M0,200 C150,160 300,240 450,220 C600,200 750,120 900,160 C1050,200 1200,160 1350,180 L1350,600 L0,600 Z"></animate>
+        </path>
+        <path class="wave-layer" d="M0,260 C150,240 300,300 450,280 C600,260 750,200 900,220 C1050,240 1200,220 1350,240 L1350,600 L0,600 Z" fill="url(#g2)" opacity="0.38">
+          <animate attributeName="d" dur="10s" repeatCount="indefinite" values="M0,260 C150,240 300,300 450,280 C600,260 750,200 900,220 C1050,240 1200,220 1350,240 L1350,600 L0,600 Z;
+            M0,240 C150,200 300,260 450,240 C600,220 750,180 900,200 C1050,220 1200,200 1350,220 L1350,600 L0,600 Z;
+            M0,260 C150,240 300,300 450,280 C600,260 750,200 900,220 C1050,240 1200,220 1350,240 L1350,600 L0,600 Z"></animate>
+        </path>
+      </g>
+    </svg>
+  </div>
+
+  <div id="loading-screen">
+    <div id="loading-text">Initializing payload...</div>
+    <div id="loading-bar-container">
+      <div id="loading-bar"></div>
+    </div>
+  </div>
+
+  <main class="page" style="display:none;">
+  <div class="hover-wrapper">
+  <button class="glass-button" onclick="window.open('https://legendaaronc.github.io/karma/script.js','_blank')">
+    Menu Code
+  </button>
+  <div class="hover-description">
+    Copy everything in the Pastebin and add it into a bookmark. Then open Blooket and click on the bookmark.
+  </div>
+</div>
+
+
+  <div class="card-grid">
+    <div class="glass-row">
+      <div class="glass-card">
+        <h2>Design</h2>
+        <p>This menu took a long time to design. We have spent 5 months on it.</p>
+      </div>
+      <div class="glass-card">
+        <h2>Animations</h2>
+        <p>This is the first Blooket menu to have animations. These animations also look good.</p>
+      </div>
+      <div class="glass-card">
+        <h2>Quality of Mods</h2>
+        <p>Our menu has the best quality mods for our users. Every mod is undetected and will always be.</p>
+      </div>
+      <div class="glass-card">
+        <h2>Free</h2>
+        <p>This menu will always be free. If you paid for this menu you got scammed.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="bottom-text">Built to be undetected. Always will be undetected.</div>
+</main>
+
+  <script>  
+    (() => {
+      const bar = document.getElementById("loading-bar");
+      const text = document.getElementById("loading-text");
+      const screen = document.getElementById("loading-screen");
+      const page = document.querySelector(".page");
+      const messages = [
+        "Initializing payload...",
+        "Injecting UI logic...",
+        "Cycling themes...",
+        "Routing categories...",
+        "Finalizing stealth..."
+      ];
+
+      let progress = 0;
+      let msgIndex = 0;
+
+      const updateText = () => {
+        text.textContent = messages[msgIndex % messages.length];
+        msgIndex++;
+      };
+
+      updateText();
+      setTimeout(() => {
+        progress = 38;
+        bar.style.width = progress + "%";
+        updateText();
+      }, 300);
+
+      setTimeout(() => {
+        progress = 70;
+        bar.style.width = progress + "%";
+        updateText();
+      }, 900);
+
+      setTimeout(() => {
+        progress = 100;
+        bar.style.width = progress + "%";
+        updateText();
+      }, 1600);
+
+      setTimeout(() => {
+        screen.remove();
+        page.style.display = "flex";
+        document.body.style.overflow = "auto";
+      }, 2000);
+    })();
+  </script>
+</body>
