@@ -75,6 +75,11 @@
       background: linear-gradient(90deg, var(--accent1), var(--accent2));
       transition: width 0.4s ease-in-out;
     }
+    #loading-screen.fade-out {
+  opacity: 0;
+  transition: opacity 0.6s ease;
+  pointer-events: none;
+}
 #copy-menu {
   position: fixed;
   top: 100px;
@@ -282,52 +287,49 @@
   <div class="bottom-text">Built to be undetected. Always will be undetected.</div>
 </main>
 
-  <script>  
-    (() => {
-      const bar = document.getElementById("loading-bar");
-      const text = document.getElementById("loading-text");
-      const screen = document.getElementById("loading-screen");
-      const page = document.querySelector(".page");
-      const messages = [
-        "Initializing payload...",
-        "Injecting UI logic...",
-        "Cycling themes...",
-        "Routing categories...",
-        "Finalizing stealth..."
-      ];
+  <script>
+(() => {
+  const bar = document.getElementById("loading-bar");
+  const text = document.getElementById("loading-text");
+  const screen = document.getElementById("loading-screen");
+  const page = document.querySelector(".page");
 
-      let progress = 0;
-      let msgIndex = 0;
+  const messages = [
+    "Initializing payload...",
+    "Injecting UI logic...",
+    "Cycling themes...",
+    "Routing categories...",
+    "Finalizing stealth..."
+  ];
 
-      const updateText = () => {
-        text.textContent = messages[msgIndex % messages.length];
-        msgIndex++;
-      };
+  let msgIndex = 0;
+  let progress = 0;
 
-      updateText();
-      setTimeout(() => {
-        progress = 38;
-        bar.style.width = progress + "%";
-        updateText();
-      }, 300);
+  // Update message every 350ms
+  const msgInterval = setInterval(() => {
+    text.textContent = messages[msgIndex % messages.length];
+    msgIndex++;
+  }, 350);
 
-      setTimeout(() => {
-        progress = 70;
-        bar.style.width = progress + "%";
-        updateText();
-      }, 900);
+  // Smooth progress bar steps
+  setTimeout(() => bar.style.width = "35%", 200);
+  setTimeout(() => bar.style.width = "65%", 700);
+  setTimeout(() => bar.style.width = "100%", 1300);
 
-      setTimeout(() => {
-        progress = 100;
-        bar.style.width = progress + "%";
-        updateText();
-      }, 1600);
+  // Fade-out + reveal page
+  setTimeout(() => {
+    clearInterval(msgInterval);
 
-      setTimeout(() => {
-        screen.remove();
-        page.style.display = "flex";
-        document.body.style.overflow = "auto";
-      }, 2000);
-    })();
-  </script>
+    // Trigger fade animation
+    screen.classList.add("fade-out");
+
+    // Remove after fade completes
+    setTimeout(() => {
+      screen.remove();
+      page.style.display = "flex";
+      document.body.style.overflow = "auto";
+    }, 600); // matches CSS transition
+  }, 1800);
+})();
+</script>
 </body>
