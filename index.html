@@ -1,1 +1,251 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>Karma | The best menu for Blooket</title><meta name="viewport" content="width=device-width,initial-scale=1"><style>:root{--bg-1:#000;--accent1:#ff6b6b;--accent2:#ff2f4b;--panel:#181818;--muted:#cfcfcf88;--glass:rgba(255,255,255,0.04)}html,body{margin:0;padding:0;font-family:Arial,sans-serif;background:var(--bg-1);color:#fff;overflow:hidden}.wave-wrap{position:fixed;inset:0;z-index:0;pointer-events:none;background:linear-gradient(180deg,#1b0d12 0%,#230b10 40%,#111 100%);overflow:hidden}svg.wave{position:absolute;left:0;bottom:0;width:200%;height:150%;transform:translateX(-25%);opacity:.95}.wave .wave-layer{mix-blend-mode:screen;opacity:.6}#loading-screen{position:fixed;top:0;left:0;width:100%;height:100%;background:#000;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:9999;font-size:1.2em;text-align:center;opacity:1}#loading-screen.fade-out{opacity:0;transition:opacity .6s ease}#loading-text{margin-bottom:20px;color:var(--accent1);text-shadow:0 0 10px var(--accent1)}#loading-bar-container{width:80%;height:12px;background:#222;border:1px solid var(--accent2);border-radius:6px;overflow:hidden;box-shadow:0 0 10px var(--accent2)}#loading-bar{height:100%;width:0;background:linear-gradient(90deg,var(--accent1),var(--accent2));transition:width .4s ease-in-out}.page{position:relative;z-index:10;min-height:100vh;display:none;flex-direction:column;align-items:center;justify-content:center;padding:48px 20px;text-align:center}.glass-row{display:flex;justify-content:center;gap:20px;flex-wrap:wrap;padding:20px}.glass-button{background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,.01));border-radius:12px;padding:8px 16px;box-shadow:0 6px 20px rgba(0,0,0,.4);backdrop-filter:blur(6px);border:1px solid var(--glass);color:#fff;font-size:14px;cursor:pointer;transition:transform .2s ease}.glass-button:hover{transform:scale(1.05)}.glass-card{background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,.01));border-radius:16px;padding:20px;box-shadow:0 10px 40px rgba(0,0,0,.6);backdrop-filter:blur(6px);border:1px solid var(--glass);width:200px;text-align:center}.glass-card h2{margin:0 0 10px;color:var(--accent1)}.glass-card p{margin:0;color:var(--muted)}</style></head><body><div class="wave-wrap" aria-hidden="true"></div><div id="loading-screen"><div id="loading-text">Initializing payload...</div><div id="loading-bar-container"><div id="loading-bar"></div></div></div><main class="page"><div class="glass-row"><button class="glass-button" onclick="window.open('https://legendaaronc.github.io/karma/script.js','_blank')">Menu Code</button></div><div class="glass-row"><div class="glass-card"><h2>Animations</h2><p>First Blooket menu with animations.</p></div><div class="glass-card"><h2>Quality</h2><p>Best quality mods, always undetected.</p></div><div class="glass-card"><h2>Free</h2><p>This menu will always be free.</p></div></div><div class="bottom-text">Built to be undetected, will always be undetected • Made by Aaron</div></main><script>(()=>{const e=document.getElementById("loading-bar"),t=document.getElementById("loading-text"),n=document.getElementById("loading-screen"),o=document.querySelector(".page"),a=["Loading website...","Initializing UI...","Checking for updates...","Syncing modules...","Finalizing karma.lol..."],r=(e,t)=>Math.floor(Math.random()*(t-e+1))+e,c=r(300,700),d=r(1e3,1500),l=r(1800,2400),i=r(2600,3300),s=r(3400,4e3),m=5e3;setTimeout(()=>{e.style.width=r(19,25)+"%",t.textContent=a[0]},c),setTimeout(()=>{e.style.width=r(38,46)+"%",t.textContent=a[1]},d),setTimeout(()=>{e.style.width=r(61,64)+"%",t.textContent=a[2]},l),setTimeout(()=>{e.style.width=r(74,86)+"%",t.textContent=a[3]},i),setTimeout(()=>{e.style.width="100%",t.textContent=a[4]},s),setTimeout(()=>{o.style.display="flex",document.body.style.overflow="auto"},s+200),setTimeout(()=>{n.classList.add("fade-out")},m-600),setTimeout(()=>{n.remove()},m)})();</script></body></html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Karma | The best menu for Blooket</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+
+  <style>
+    :root {
+      --bg-1: #000;
+      --accent1: #ff6b6b;
+      --accent2: #ff2f4b;
+      --panel: #181818;
+      --muted: #cfcfcf88;
+      --glass: rgba(255,255,255,0.04);
+    }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+      background: var(--bg-1);
+      color: #fff;
+      overflow: hidden;
+    }
+
+    .wave-wrap {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      background: linear-gradient(180deg,#1b0d12 0%,#230b10 40%,#111 100%);
+      overflow: hidden;
+    }
+
+    #loading-screen {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: #000;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      font-size: 1.2em;
+      text-align: center;
+      opacity: 1;
+    }
+    #loading-screen.fade-out {
+      opacity: 0;
+      transition: opacity .6s ease;
+    }
+    #loading-text {
+      margin-bottom: 20px;
+      color: var(--accent1);
+      text-shadow: 0 0 10px var(--accent1);
+    }
+    #loading-bar-container {
+      width: 80%;
+      height: 12px;
+      background: #222;
+      border: 1px solid var(--accent2);
+      border-radius: 6px;
+      overflow: hidden;
+      box-shadow: 0 0 10px var(--accent2);
+    }
+    #loading-bar {
+      height: 100%;
+      width: 0;
+      background: linear-gradient(90deg,var(--accent1),var(--accent2));
+      transition: width .4s ease-in-out;
+    }
+
+    .page {
+      position: relative;
+      z-index: 10;
+      min-height: 100vh;
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 48px 20px;
+      text-align: center;
+    }
+
+    .glass-row {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      flex-wrap: wrap;
+      padding: 20px;
+    }
+
+    .glass-button {
+      background: linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,.01));
+      border-radius: 12px;
+      padding: 8px 16px;
+      box-shadow: 0 6px 20px rgba(0,0,0,.4);
+      backdrop-filter: blur(6px);
+      border: 1px solid var(--glass);
+      color: #fff;
+      font-size: 14px;
+      cursor: pointer;
+      transition: transform .2s ease;
+      text-decoration: none;
+      user-select: none;
+    }
+    .glass-button:hover {
+      transform: scale(1.05);
+    }
+
+    /* Cards */
+    .glass-card {
+      background: linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,.01));
+      border-radius: 16px;
+      padding: 20px;
+      box-shadow: 0 10px 40px rgba(0,0,0,.6);
+      backdrop-filter: blur(6px);
+      border: 1px solid var(--glass);
+      width: 200px;
+      text-align: center;
+    }
+    .glass-card h2 {
+      margin: 0 0 10px;
+      color: var(--accent1);
+    }
+    .glass-card p {
+      margin: 0;
+      color: var(--muted);
+    }
+
+    .bottom-text {
+      margin-top: 40px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="wave-wrap" aria-hidden="true"></div>
+
+<div id="loading-screen">
+  <div id="loading-text">Initializing payload...</div>
+  <div id="loading-bar-container"><div id="loading-bar"></div></div>
+</div>
+
+<main class="page">
+
+  <div class="glass-row">
+
+    <a id="bookmarklet-btn" class="glass-button" draggable="true">
+      Drag Karma Bookmarklet
+    </a>
+
+    <button class="glass-button"
+      onclick="window.open('https://legendaaronc.github.io/karma/script.js','_blank')">
+      Menu Code
+    </button>
+
+  </div>
+
+  <div class="glass-row">
+    <div class="glass-card">
+      <h2>Animations</h2>
+      <p>First Blooket menu with animations.</p>
+    </div>
+    <div class="glass-card">
+      <h2>Quality</h2>
+      <p>Best quality mods, always undetected.</p>
+    </div>
+    <div class="glass-card">
+      <h2>Free</h2>
+      <p>This menu will always be free.</p>
+    </div>
+  </div>
+
+  <div class="bottom-text">
+    Built to be undetected, will always be undetected • Made by Aaron
+  </div>
+
+</main>
+
+<script>
+(() => {
+  const bar = document.getElementById("loading-bar");
+  const text = document.getElementById("loading-text");
+  const screen = document.getElementById("loading-screen");
+  const page = document.querySelector(".page");
+
+  const msgs = [
+    "Loading website...",
+    "Initializing UI...",
+    "Checking for updates...",
+    "Syncing modules...",
+    "Finalizing karma.lol..."
+  ];
+
+  const rand = (a,b)=>Math.floor(Math.random()*(b-a+1))+a;
+
+  const t1 = rand(300,700);
+  const t2 = rand(1000,1500);
+  const t3 = rand(1800,2400);
+  const t4 = rand(2600,3300);
+  const t5 = rand(3400,4000);
+  const done = 5000;
+
+  setTimeout(()=>{ bar.style.width=rand(19,25)+"%"; text.textContent=msgs[0]; }, t1);
+  setTimeout(()=>{ bar.style.width=rand(38,46)+"%"; text.textContent=msgs[1]; }, t2);
+  setTimeout(()=>{ bar.style.width=rand(61,64)+"%"; text.textContent=msgs[2]; }, t3);
+  setTimeout(()=>{ bar.style.width=rand(74,86)+"%"; text.textContent=msgs[3]; }, t4);
+  setTimeout(()=>{ bar.style.width="100%"; text.textContent=msgs[4]; }, t5);
+
+  setTimeout(()=>{ page.style.display="flex"; document.body.style.overflow="auto"; }, t5+200);
+  setTimeout(()=>{ screen.classList.add("fade-out"); }, done-600);
+  setTimeout(()=>{ screen.remove(); }, done);
+})();
+
+(async () => {
+  const btn = document.getElementById("bookmarklet-btn");
+
+  try {
+    const url = "https://legendaaronc.github.io/karma/script.js";
+    const res = await fetch(url, { cache: "no-store" });
+
+    if (!res.ok) throw new Error("HTTP " + res.status);
+
+    let code = await res.text();
+
+    if (!code.trim().startsWith("javascript:")) {
+      code = `(function(){\n${code}\n})();`;
+    } else {
+      code = code.replace(/^javascript:/i, "");
+    }
+
+    const href = "javascript:" + encodeURIComponent(code);
+    btn.href = href;
+
+  } catch (err) {
+    console.error(err);
+    btn.textContent = "Failed to load script.js";
+    btn.style.opacity = 0.5;
+    btn.style.pointerEvents = "none";
+  }
+})();
+</script>
+
+</body>
+</html>
