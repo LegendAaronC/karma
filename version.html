@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Check Version</title>
+<script>
+(async function () {
+
+    const params = new URLSearchParams(location.search);
+    const currentVersion = params.get("version") || "0.0.0";
+
+    let newestVersion = "0.0.0";
+
+    try {
+        newestVersion = await fetch(
+            "https://raw.githubusercontent.com/LegendAaronC/karma/main/version"
+        )
+        .then(r => r.text())
+        .then(v => v.trim());
+    } catch (e) {
+        console.log("Version check failed:", e);
+    }
+
+    function compareVersions(a, b){
+        a = a.split(".").map(Number);
+        b = b.split(".").map(Number);
+
+        for (let i = 0; i < Math.max(a.length, b.length); i++){
+            let x = a[i] || 0;
+            let y = b[i] || 0;
+
+            if (x < y) return -1;
+            if (x > y) return 1;
+        }
+        return 0;
+    }
+
+    if (compareVersions(currentVersion, newestVersion) < 0){
+        location.href = "https://legendaaronc.github.io/karma";
+        return;
+    }
+
+    document.body.innerHTML = "<h2>You have the latest version</h2>";
+
+    setTimeout(() => {
+        window.close();
+
+        setTimeout(() => {
+            document.body.innerHTML =
+                "<h3>You can now safely close this tab.</h3>";
+        }, 200);
+
+    }, 3000);
+
+})();
+</script>
+</head>
+<body></body>
+</html>
