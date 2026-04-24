@@ -261,6 +261,7 @@
     text-align: center;
     margin-bottom: 70px;
     position: relative;
+    z-index:10;
     overflow: hidden;
   }
 
@@ -300,6 +301,7 @@
     gap:14px;
     justify-content:center;
     flex-wrap:wrap;
+    z-index:20;
   }
 
   .btn {
@@ -310,6 +312,7 @@
     letter-spacing:.14em;
     text-transform:uppercase;
     transition:.25s ease;
+    z-index:30;
   }
 
   .btn-primary {
@@ -529,7 +532,7 @@ addEventListener('mousemove', e=>{
 
     btn.href = "javascript:" + code;
 
-    btn.textContent = "Drag To Bookmarks Bar";
+    btn.textContent = "karma.lol";
 
   } catch (err) {
     console.error(err);
