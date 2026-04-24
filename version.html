@@ -36,7 +36,10 @@
     }
 
     if (compareVersions(currentVersion, newestVersion) < 0){
-        location.href = "https://legendaaronc.github.io/karma";
+        document.body.innerHTML = "<h2>Opening the menu website because your menu is outdated. Get the new version there.</h2>";
+        setTimeout(() => {
+            location.href = "https://legendaaronc.github.io/karma";
+        }, 3000);
         return;
     }
 
