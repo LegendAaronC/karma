@@ -219,4 +219,288 @@
   }
   .card:hover::before { opacity: 1; }
 
-  .card.delay-1 { animation:
+  .card.delay-1 { animation: riseup 0.7s 3.7s forwards; }
+  .card.delay-2 { animation: riseup 0.7s 3.85s forwards; }
+  .card.delay-3 { animation: riseup 0.7s 4s forwards; }
+
+  .card-icon {
+    width: 42px;
+    height: 42px;
+    display: grid;
+    place-items: center;
+    border-radius: 12px;
+    margin-bottom: 18px;
+    background: linear-gradient(135deg, rgba(123,92,247,.2), rgba(0,229,204,.12));
+    border: 1px solid var(--border);
+    color: var(--cyan);
+    font-weight: 700;
+  }
+
+  .card h3 {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.1rem;
+    margin-bottom: 14px;
+  }
+
+  .card p {
+    color: var(--muted);
+    font-size: .8rem;
+    line-height: 1.7;
+  }
+
+  /* === CTA === */
+  .cta {
+    opacity: 0;
+    animation: riseup .8s 4.2s forwards;
+    background:
+      linear-gradient(180deg, rgba(255,255,255,.015), rgba(255,255,255,.01)),
+      radial-gradient(circle at top right, rgba(123,92,247,.18), transparent 45%);
+    border: 1px solid var(--border);
+    border-radius: 28px;
+    padding: 52px 36px;
+    text-align: center;
+    margin-bottom: 70px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .cta::before {
+    content:'';
+    position:absolute;
+    inset:-2px;
+    border-radius:inherit;
+    padding:1px;
+    background:linear-gradient(135deg,var(--purple),transparent,var(--cyan));
+    -webkit-mask:
+      linear-gradient(#000 0 0) content-box,
+      linear-gradient(#000 0 0);
+    -webkit-mask-composite:xor;
+    mask-composite:exclude;
+    opacity:.55;
+  }
+
+  .cta h2 {
+    font-family:'Syne',sans-serif;
+    font-size: clamp(2rem,6vw,4rem);
+    line-height:.95;
+    margin-bottom: 20px;
+    letter-spacing:-2px;
+  }
+
+  .cta p {
+    max-width:540px;
+    margin:0 auto 34px;
+    color:var(--muted);
+    line-height:1.8;
+    font-size:.82rem;
+  }
+
+  .buttons {
+    display:flex;
+    gap:14px;
+    justify-content:center;
+    flex-wrap:wrap;
+  }
+
+  .btn {
+    text-decoration:none;
+    padding:14px 24px;
+    border-radius:14px;
+    font-size:.75rem;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    transition:.25s ease;
+  }
+
+  .btn-primary {
+    background:linear-gradient(135deg,var(--purple),#5f8dff);
+    color:white;
+    box-shadow:0 0 35px rgba(123,92,247,.25);
+  }
+
+  .btn-primary:hover {
+    transform:translateY(-2px) scale(1.02);
+  }
+
+  .btn-secondary {
+    border:1px solid var(--border-bright);
+    color:var(--cyan);
+    background:rgba(0,229,204,.06);
+  }
+
+  .btn-secondary:hover {
+    background:rgba(0,229,204,.12);
+  }
+
+  footer {
+    opacity:0;
+    animation: fadein .8s 4.5s forwards;
+    display:flex;
+    justify-content:space-between;
+    gap:20px;
+    flex-wrap:wrap;
+    color:var(--muted);
+    font-size:.7rem;
+    padding-top:24px;
+    border-top:1px solid rgba(255,255,255,.04);
+  }
+</style>
+</head>
+<body>
+
+<div class="orb orb-1"></div>
+<div class="orb orb-2"></div>
+<canvas id="particles"></canvas>
+
+<div id="loader">
+  <div class="loader-brand">karma</div>
+  <div class="loader-text">INITIALIZING MODULES</div>
+  <div class="loader-bar-wrap">
+    <div class="loader-bar"></div>
+  </div>
+</div>
+
+<div id="main">
+  <nav>
+    <div class="nav-logo">Karma</div>
+    <div class="nav-tag">Blooket Utility</div>
+  </nav>
+
+  <section class="hero">
+    <div class="hero-eyebrow">Elite Automation Layer</div>
+    <h1 class="hero-title">The Best Menu<br>For Blooket</h1>
+    <p class="hero-sub">
+      Fast. Clean. Undetected aesthetics. Karma combines premium UI,
+      smart tools and competitive advantage into one polished menu.
+    </p>
+
+    <div class="hero-badges">
+      <span class="badge accent">Advanced</span>
+      <span class="badge">Optimized</span>
+      <span class="badge">Stealth</span>
+      <span class="badge">Free</span>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <section class="features">
+    <div class="card delay-1">
+      <div class="card-icon">01</div>
+      <h3>Premium Interface</h3>
+      <p>
+        Futuristic menu system built for speed, clarity and minimal latency.
+      </p>
+    </div>
+
+    <div class="card delay-2">
+      <div class="card-icon">02</div>
+      <h3>Power Features</h3>
+      <p>
+        Packed utilities, automation modules and constantly evolving tooling.
+      </p>
+    </div>
+
+    <div class="card delay-3">
+      <div class="card-icon">03</div>
+      <h3>Performance First</h3>
+      <p>
+        Lightweight architecture designed to stay smooth and responsive.
+      </p>
+    </div>
+  </section>
+
+  <section class="cta">
+    <h2>Deploy Karma</h2>
+    <p>
+      Join users running a cleaner, faster and more advanced Blooket menu.
+      Minimal setup. Maximum control.
+    </p>
+
+    <div class="buttons">
+      <a href="#" class="btn btn-primary">Launch</a>
+      <a href="https://github.com/LegendAaronC/karma" class="btn btn-secondary">GitHub</a>
+    </div>
+  </section>
+
+  <footer>
+    <span>© 2026 Karma</span>
+    <span>Built by Aaron</span>
+  </footer>
+</div>
+
+<script>
+/* loader */
+setTimeout(() => {
+  document.getElementById('loader').classList.add('hidden');
+  document.getElementById('main').classList.add('visible');
+}, 2700);
+
+/* particles */
+const canvas = document.getElementById('particles');
+const ctx = canvas.getContext('2d');
+let w,h,particles=[];
+
+function resize(){
+  w=canvas.width=innerWidth;
+  h=canvas.height=innerHeight;
+}
+addEventListener('resize',resize);
+resize();
+
+for(let i=0;i<65;i++){
+ particles.push({
+   x:Math.random()*w,
+   y:Math.random()*h,
+   vx:(Math.random()-.5)*.25,
+   vy:(Math.random()-.5)*.25,
+   r:Math.random()*1.8+0.6
+ });
+}
+
+function draw(){
+ ctx.clearRect(0,0,w,h);
+ 
+ for(let p of particles){
+   p.x+=p.vx;
+   p.y+=p.vy;
+
+   if(p.x<0||p.x>w) p.vx*=-1;
+   if(p.y<0||p.y>h) p.vy*=-1;
+
+   ctx.beginPath();
+   ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+   ctx.fillStyle='rgba(123,92,247,.55)';
+   ctx.fill();
+ }
+
+ for(let i=0;i<particles.length;i++){
+   for(let j=i+1;j<particles.length;j++){
+      const a=particles[i], b=particles[j];
+      const dx=a.x-b.x;
+      const dy=a.y-b.y;
+      const d=Math.hypot(dx,dy);
+      if(d<120){
+        ctx.strokeStyle=`rgba(0,229,204,${(1-d/120)*0.08})`;
+        ctx.beginPath();
+        ctx.moveTo(a.x,a.y);
+        ctx.lineTo(b.x,b.y);
+        ctx.stroke();
+      }
+   }
+ }
+ requestAnimationFrame(draw);
+}
+draw();
+
+/* subtle parallax */
+addEventListener('mousemove', e=>{
+ const x=(e.clientX/window.innerWidth-.5)*18;
+ const y=(e.clientY/window.innerHeight-.5)*18;
+ document.querySelector('.orb-1').style.transform=`translate(${x}px,${y}px)`;
+ document.querySelector('.orb-2').style.transform=`translate(${-x}px,${-y}px)`;
+});
+</script>
+
+</body>
+</html>
