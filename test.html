@@ -414,13 +414,21 @@
     <h2>Deploy Karma</h2>
     <p>
       Join users running a cleaner, faster and more advanced Blooket menu.
-      Minimal setup. Maximum control.
+      Minimal setup. Maximum control. Drag to the bookmarks.
     </p>
 
     <div class="buttons">
-      <a href="#" class="btn btn-primary">Launch</a>
-      <a href="https://github.com/LegendAaronC/karma" class="btn btn-secondary">GitHub</a>
-    </div>
+  <a id="bookmarklet-btn" href="#"
+     class="btn btn-primary"
+     draggable="true">
+     karma.lol
+  </a>
+
+  <a href="https://github.com/LegendAaronC/karma"
+     class="btn btn-secondary">
+     GitHub
+  </a>
+</div>
   </section>
 
   <footer>
@@ -500,6 +508,36 @@ addEventListener('mousemove', e=>{
  document.querySelector('.orb-1').style.transform=`translate(${x}px,${y}px)`;
  document.querySelector('.orb-2').style.transform=`translate(${-x}px,${-y}px)`;
 });
+</script>
+ <script>
+(async () => {
+  const btn = document.getElementById("bookmarklet-btn");
+
+  try {
+    const url = "https://legendaaronc.github.io/karma/script.js";
+    const res = await fetch(url, { cache: "no-store" });
+
+    if (!res.ok) throw new Error("HTTP " + res.status);
+
+    let code = await res.text();
+
+    if (!code.trim().startsWith("javascript:")) {
+      code = `(function(){\n${code}\n})();`;
+    } else {
+      code = code.replace(/^javascript:/i, "");
+    }
+
+    btn.href = "javascript:" + code;
+
+    btn.textContent = "Drag To Bookmarks Bar";
+
+  } catch (err) {
+    console.error(err);
+    btn.textContent = "Failed to Load";
+    btn.style.opacity = .5;
+    btn.style.pointerEvents = "none";
+  }
+})();
 </script>
 
 </body>
