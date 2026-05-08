@@ -1,5 +1,5 @@
 javascript:(async function () {
-  const version = "1.0.0";
+  const version = "2.5.0";
 (function injectFont() { const style = document.createElement("style"); style.textContent = ` @font-face { font-family: "Ndot57Caps"; src: url("https://ac.blooket.com/play-frontend/208b500eaf6a02de6236333d99331a18ce8c8e84/_next/static/media/ee40bb094c99a29a-s.p.woff2") format("opentype"); font-weight: normal; font-style: normal; font-display: swap; } `; document.head.appendChild(style); })();
 async function SendPrompt(message) {
   return new Promise((resolve) => {
@@ -63,7 +63,7 @@ async function SendPrompt(message) {
         container.style.transform = 'translateX(-50%) translateY(-30px)';
         setTimeout(() => {
           container.remove();
-          resolve(val || null);
+resolve(val || null);
         }, 300);
       }
     });
@@ -232,6 +232,9 @@ function AntiBanToggle(toggle) {
     } else if (_antiBanDisable) {
         _antiBanDisable();
     }
+}
+function CheckForUpdates() {
+    window.open("https://legendaaronc.github.io/karma/version.html?version=" + version);
 }
   function removeRandomNameMod() {
     let iframe = document.querySelector("iframe");
@@ -658,6 +661,7 @@ function testasdasd(toggle) {
     }
 }
 
+
 function CryptoCheat(toggle) {
     let cryptoInterval = null;
 
@@ -697,9 +701,8 @@ function CryptoCheat(toggle) {
                     for (const button of document.querySelector('div[class*=buttonContainer]').children) {
                         if (button.innerText === state.correctPassword) {
                             button.click();
-                            if (!notifiedThisRound) {setTimeout(() => {
-  SendNotification(`Hacked and stole crypto from ${playerName}.`);
-}, 4500);
+                            if (!notifiedThisRound) {
+  SendNotification(`Hacking and stealing crypto from ${playerName}.`);
                             notifiedThisRound = true;
                             }
                             break;
@@ -877,64 +880,6 @@ function AutoAnswerCheat(toggle) {
     }
 }
 
-let crashDisable = null;
-
-function CrashCheat(toggle) {
-    let interval = null;
-
-    function getReactNode() {
-        let el = document.querySelector("#app");
-        while (el) {
-            const node = Object.values(el)[1]?.children?.[0]?._owner?.stateNode;
-            if (node) return node;
-            el = el.querySelector(":scope>div");
-        }
-        return null;
-    }
-
-    function run() {
-        const stateNode = getReactNode();
-        if (!stateNode) return;
-
-        const controller = stateNode.props?.liveGameController;
-        const name = stateNode.props?.client?.name;
-
-        if (!controller || !name) return;
-
-        controller.setVal({
-            path: `c/${name}/cr`,
-            val: `9999999999999999999999999999999999999999999999${
-                new Array(999).fill("\u0e47".repeat(70)).join(" ")
-            }`
-        });
-    }
-
-    if (toggle) {
-        if (crashDisable) return;
-
-        run();
-        interval = setInterval(run, 25);
-
-        crashDisable = () => {
-            clearInterval(interval);
-            interval = null;
-
-            const stateNode = getReactNode();
-            if (stateNode) {
-                stateNode.props.liveGameController.setVal({
-                    path: `c/${stateNode.props.client.name}/cr`,
-                    val: ""
-                });
-            }
-
-            crashDisable = null;
-        };
-
-    } else if (crashDisable) {
-        crashDisable();
-    }
-}
-
 
 let _highlightAnswersDisable = null;
 let _originalColors = [];
@@ -1091,7 +1036,36 @@ function subtleHighlightAnswers(toggle) {
 
 
 
-  async function resetPlayerGold() {
+async function setPlayerGold(){
+  const player = await SendPrompt("What is the players name? (Case sensitive)");
+  const amountintext = await SendPrompt("How much gold would you like to set to " + player + "?") || 0;
+  const amount = parseInt(amountintext) || 0;
+  const sn = Object.values(document.querySelector('#app>div>div'))[1].children[0]._owner.stateNode;
+  sn.props.liveGameController.setVal({
+      path: `c/${sn.props.client.name}/tat`,
+      val: `${player}:swap:${amount}`
+  });
+  SendNotification(`Set ${player}'s gold to ${amount}.`);
+}
+
+function randomInt(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+async function debtPlayerGold() {
+    const player = await SendPrompt("What is the players name? (Case sensitive)");
+    const amount = randomInt(-25, -10000);
+    const sn = Object.values(document.querySelector('#app>div>div'))[1].children[0]._owner.stateNode;
+    sn.props.liveGameController.setVal({
+        path: `c/${sn.props.client.name}/tat`,
+        val: `${player}:swap:${amount}`
+    });
+    SendNotification(`${player} is now in ${amount} debt.`);
+}
+
+
+
+async function resetPlayerGold() {
     const findReactNode = (root = document.querySelector("body>div")) => {
         while (root) {
             const node = Object.values(root)[1]?.children?.[0]?._owner?.stateNode;
@@ -1113,30 +1087,6 @@ function subtleHighlightAnswers(toggle) {
         val: `${target}:swap:0`
     });
     SendNotification(`Reset ${target}'s gold.`);
-}
-
-async function setPlayerGold() {
-    const findReactNode = (root = document.querySelector("body>div")) => {
-        while (root) {
-            const node = Object.values(root)[1]?.children?.[0]?._owner?.stateNode;
-            if (node) return node;
-            root = root.querySelector(":scope>div");
-        }
-        return null;
-    };
-
-    const target = await SendPrompt("Who's gold would you like to set? (Case sensitive)");
-    if (!target) return;
-    const amount = await parseInt(SendPrompt("How much gold would you like to set?")) || 0;
-
-    const stateNode = findReactNode();
-    if (!stateNode || !stateNode.props?.liveGameController || !stateNode.props?.client) return;
-
-    stateNode.props.liveGameController.setVal({
-        path: `c/${stateNode.props.client.name}/tat`,
-        val: `${target}:swap:${amount}`
-    });
-    SendNotification(`Set ${target}'s gold to ${amount}.`);
 }
 
 
@@ -1800,6 +1750,48 @@ var fvals = {
 };
 
 
+  async function setWeight() {
+                let amount = await SendPrompt("What would you like to set your weight to?");
+                var t = Object.values(document.querySelector("body div[id] > div > div"))[1].children[0]._owner.stateNode;
+                t.setState({
+                    weight: amount,
+                    weight2: amount
+                }), t.props.liveGameController.setVal({
+                    path: "c/" + t.props.client.name,
+                    val: {
+                        b: t.props.client.blook,
+                        w: amount,
+                        f: ["Crab", "Jellyfish", "Frog", "Pufferfish", "Octopus", "Narwhal", "Megalodon", "Blobfish", "Baby Shark"][Math.floor(9 * Math.random())]
+                    }
+                })
+            }
+
+              async function setGold() {
+                let amount = await SendPrompt("What would you like to set your gold to?");
+                var t = Object.values(document.querySelector("body div[id] > div > div"))[1].children[0]._owner.stateNode;
+                t.setState({
+                    gold: amount,
+                    gold2: amount
+                }), t.props.liveGameController.setVal({
+                    path: "c/".concat(t.props.client.name),
+                    val: {
+                        b: t.props.client.blook,
+                        g: amount,
+                    }
+                })
+            }
+
+            async function setCrypto() {
+                let amount = await SendPrompt("What would you like to set your crypto to?");
+                var t = Object.values(document.querySelector("body div[id] > div > div"))[1].children[0]._owner.stateNode;
+                t.setState({
+                    crypto: amount,
+                    crypto2: amount
+                }), t.props.liveGameController.setVal({
+                    path: "c/" + t.props.client.name + "/cr",
+                    val: e
+                })
+            }
 
   function unlockAllBlooks() {
       const lobby = window.location.pathname.startsWith("/play/lobby");
@@ -2296,99 +2288,6 @@ function toggleMenu(toggle) {
     }
 }
 
-let freezeInterval = null;
-let _freezeDisable;
-
-function toggleFreeze(toggle) {
-    if (!toggle) {
-        _freezeDisable();
-        return;
-    }
-
-    if (freezeInterval) return;
-
-    const encodedChars = [
-        '\\u2f9f', '\\u4fff', '\\u4f52',
-        '\\u0E47', '\\u0E47', '\\u0E47',
-        '\\u0E47', '\\u0E47', '\\u0E47',
-        '\\u0E47', '\\u4FF1', '\\u4FF2'
-    ];
-    const chars = encodedChars.map(char => eval(`"${char}"`));
-
-    function makeLongText() {
-        return new Array(3e6)
-            .fill()
-            .map(() => chars[Math.floor(Math.random() * chars.length)])
-            .join("");
-    }
-
-    let { props: t } = Object.values(function e(t = document.querySelector("body>div")) {
-        return Object.values(t)[1]?.children?.[0]?._owner.stateNode
-            ? t
-            : e(t.querySelector(":scope>div"));
-    }())[1].children[0]._owner.stateNode;
-
-    freezeInterval = setInterval(() => {
-        const repeatedText = makeLongText();
-
-        t.client.blook = repeatedText;
-
-        t.liveGameController.setVal({
-            path: `c/${t.client.name}/b`,
-            val: repeatedText
-        });
-    }, 0);
-
-    _freezeDisable = () => {
-        if (freezeInterval) {
-            clearInterval(freezeInterval);
-            freezeInterval = null;
-        }
-        _freezeDisable = () => {};
-    };
-}
-
-let _greenScreenDisable;
-let _greenScreenInterval = null;
-
-function crashHostpermanent(toggle) {
-    var a = Object.values(function e(t = document.querySelector("#app")) {
-        return Object.values(t)[1]?.children?.[0]?._owner.stateNode
-            ? t
-            : e(t.querySelector(":scope>div"));
-    }())[1].children[0]._owner.stateNode;
-
-    if (!toggle) {
-        _greenScreenDisable();
-        return;
-    }
-
-    if (_greenScreenInterval) return;
-
-    let payload = () => {
-        a.props.liveGameController.setVal({
-            path: `c/${a.props.client.name}/cr/t`,
-            val: "t"
-        });
-    };
-
-    _greenScreenInterval = setInterval(payload, 25);
-
-    _greenScreenDisable = () => {
-        if (_greenScreenInterval) {
-            clearInterval(_greenScreenInterval);
-            _greenScreenInterval = null;
-        }
-
-        a.props.liveGameController.setVal({
-            path: `c/${a.props.client.name}/cr/t`,
-            val: ""
-        });
-
-        _greenScreenDisable = () => {};
-    };
-}
-
 function markMenuMinimized() {
     _menuWasMinimized = true;
 }
@@ -2419,10 +2318,11 @@ document.addEventListener("keydown", (e) => {
   button.add("Subtle Highlight Answers").category("global").togglable().method = (toggledfgdfgsgs3ds34) => subtleHighlightAnswers(toggledfgdfgsgs3ds34);
   button.add("Unlock All Blooks").category("global").method = () => unlockAllBlooks();
 
-  button.add("Frenzy").category("fishingfrenzy").method = () => triggerFishingFrenzy();
   button.add("Distraction").category("fishingfrenzy").method = () => sendFishingDistraction();
+  button.add("Frenzy").category("fishingfrenzy").method = () => triggerFishingFrenzy();
   button.add("Remove Distractions").category("fishingfrenzy").togglable().method = (state2) => removeFishingDistraction(state2);
   button.add("Set Fishing Lure").category("fishingfrenzy").method = () => setLureLevelWithPrompt();
+  button.add("Set Weight").category("fishingfrenzy").method = () => setWeight();
 
   button.add("Auto Hack Players").category("cryptohack").togglable().method = (state4asdasdasd21) => CryptoCheat(state4asdasdasd21);
   button.add("Crypto ESP").category("cryptohack").togglable().method = (state67) => revealCryptoChoiceESP(state67);
@@ -2430,12 +2330,16 @@ document.addEventListener("keydown", (e) => {
   button.add("Password ESP").category("cryptohack").togglable().method = (state41231231) => runPasswordESP(state41231231);
   button.add("Remove Hack").category("cryptohack").togglable().method = (state890331) => RemoveHack(state890331);
   button.add("Steal Crypto From Player").category("cryptohack").method = () => stealCryptoFromPlayer();
+  button.add("Set Crypto").category("cryptohack").method = () => setCrypto();
   button.add("Set Crypto Password").category("cryptohack").method = () => setCryptoPasswordWithPrompt();
 
   button.add("Auto Choose").category("goldquest").togglable().method = (state69) => AutoChooseGold(state69);
   button.add("Chest ESP").category("goldquest").togglable().method = (state3) => revealChestAnswers(state3);
+  button.add("Debt Player Gold").category("goldquest").method = () => debtPlayerGold();
   button.add("Flood Leaderboard").category("goldquest").method = () => sendAdText();
   button.add("Reset Players Gold").category("goldquest").method = () => resetPlayerGold();
+  button.add("Set Gold").category("goldquest").method = () => setGold();
+  button.add("Set Player Gold").category("goldquest").method = () => setPlayerGold();
   button.add("Swap Gold").category("goldquest").method = () => swapGoldWithPlayer();
 
   let savedTheme = loadTheme();
@@ -2453,6 +2357,8 @@ colorButton.onclick = () => {
 };
 categories["settings"].buttons.push(colorButton);
   applyTheme(savedTheme);
+
+  button.add("Check For Updates").category("settings").method = () => CheckForUpdates();
 
   searchbar.addtocategory("search");
 
@@ -2570,7 +2476,6 @@ try {
 try { _cryptoCheatDisable?.(); } catch(e) {}
 try { _highlightAnswersDisable?.(); } catch(e) {}
 try { _removeHackDisable(); } catch(e) {}
-try { _crashPasswordDisable(); } catch(e) {}
 try { subtleToggleDisable(); } catch(e) {}
 
 } catch (e) {}
