@@ -1,191 +1,514 @@
 javascript:(async function () {
-  const version = "2.5.0";
+  const version = "3.0.0";
 (function injectFont() { const style = document.createElement("style"); style.textContent = ` @font-face { font-family: "Ndot57Caps"; src: url("https://ac.blooket.com/play-frontend/208b500eaf6a02de6236333d99331a18ce8c8e84/_next/static/media/ee40bb094c99a29a-s.p.woff2") format("opentype"); font-weight: normal; font-style: normal; font-display: swap; } `; document.head.appendChild(style); })();
 async function SendPrompt(message) {
   return new Promise((resolve) => {
-    let container = document.getElementById('prompt-container');
+    let container = document.getElementById("prompt-container");
 
     if (!container) {
-      container = document.createElement('div');
-      container.id = 'prompt-container';
+      container = document.createElement("div");
+      container.id = "prompt-container";
+
       Object.assign(container.style, {
-        position: 'fixed',
-        top: '20px',
-        left: '50%',
-        transform: 'translateX(-50%) translateY(-30px)',
-        background: 'rgba(0,0,0,0.9)',
-        color: '#fff',
-        padding: '16px 20px',
-        borderRadius: '10px',
-        fontFamily: '"Ndot57Caps", sans-serif',
-        fontSize: '14px',
-        boxShadow: '0 4px 12px rgba(0,0,0,0.4)',
-        zIndex: '9999',
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        gap: '10px',
-        opacity: '0',
-        transition: 'opacity 0.3s ease, transform 0.3s ease',
+        position: "fixed",
+
+        top: "20px",
+        left: "50%",
+
+        transform: "translateX(-50%) translateY(-30px) scale(.96)",
+
+        minWidth: "320px",
+        maxWidth: "420px",
+
+        padding: "18px",
+
+        borderRadius: "18px",
+
+        background: `
+          linear-gradient(
+            180deg,
+            rgba(255,255,255,.10),
+            rgba(255,255,255,.04)
+          )
+        `,
+
+        border: "1px solid rgba(255,255,255,.08)",
+
+        backdropFilter: "blur(24px)",
+        WebkitBackdropFilter: "blur(24px)",
+
+        boxShadow: `
+          0 12px 40px rgba(0,0,0,.45),
+          inset 0 1px 0 rgba(255,255,255,.05)
+        `,
+
+        overflow: "hidden",
+
+        color: "#fff",
+
+        fontFamily: `"Ndot57Caps", Inconsolata, sans-serif`,
+        fontSize: "14px",
+
+        zIndex: "9999999999",
+
+        display: "flex",
+        flexDirection: "column",
+
+        gap: "14px",
+
+        opacity: "0",
+
+        transition: `
+          opacity .35s cubic-bezier(.2,.9,.2,1),
+          transform .35s cubic-bezier(.2,.9,.2,1)
+        `,
       });
+
       document.body.appendChild(container);
     } else {
-      container.innerHTML = '';
-      container.style.opacity = '0';
-      container.style.transform = 'translateX(-50%) translateY(-30px)';
+      container.innerHTML = "";
+
+      container.style.opacity = "0";
+      container.style.transform =
+        "translateX(-50%) translateY(-30px) scale(.96)";
     }
 
-    const msg = document.createElement('div');
+    const dim = document.createElement("div");
+
+    Object.assign(dim.style, {
+      position: "absolute",
+      inset: "0",
+
+      background: `
+        radial-gradient(
+          circle at top left,
+          rgba(10,132,255,.10),
+          transparent 40%
+        ),
+
+        radial-gradient(
+          circle at bottom right,
+          rgba(175,82,222,.08),
+          transparent 40%
+        ),
+
+        rgba(0,0,0,.34)
+      `,
+
+      pointerEvents: "none",
+    });
+
+    container.appendChild(dim);
+
+    const shine = document.createElement("div");
+
+    Object.assign(shine.style, {
+      position: "absolute",
+
+      top: "0",
+      left: "-120%",
+
+      width: "70%",
+      height: "100%",
+
+      background: `
+        linear-gradient(
+          90deg,
+          transparent,
+          rgba(255,255,255,.10),
+          transparent
+        )
+      `,
+
+      transform: "skewX(-20deg)",
+
+      animation: "glassPromptShine 4s linear infinite",
+
+      pointerEvents: "none",
+    });
+
+    container.appendChild(shine);
+
+    const msg = document.createElement("div");
+
+    Object.assign(msg.style, {
+      position: "relative",
+      zIndex: "2",
+
+      lineHeight: "1.4",
+
+      fontWeight: "700",
+
+      color: "#fff",
+    });
+
     msg.textContent = message;
+
     container.appendChild(msg);
 
-    const input = document.createElement('input');
+    const input = document.createElement("input");
+
     Object.assign(input.style, {
-      padding: '8px 12px',
-      borderRadius: '6px',
-      border: '1px solid #ccc',
-      fontSize: '14px',
-      minWidth: '200px',
-      fontFamily: '"Ndot57Caps", sans-serif',
+      position: "relative",
+      zIndex: "2",
+
+      padding: "12px 14px",
+
+      borderRadius: "12px",
+
+      border: "1px solid rgba(255,255,255,.08)",
+
+      outline: "none",
+
+      background: `
+        linear-gradient(
+          180deg,
+          rgba(255,255,255,.10),
+          rgba(255,255,255,.04)
+        )
+      `,
+
+      backdropFilter: "blur(16px)",
+
+      color: "#fff",
+
+      fontSize: "14px",
+
+      minWidth: "220px",
+
+      fontFamily: `"Ndot57Caps", Inconsolata, sans-serif`,
+
+      transition: `
+        border .2s ease,
+        background .2s ease,
+        box-shadow .2s ease
+      `,
     });
+
+    input.placeholder = "Type here...";
+
+    input.onfocus = () => {
+      input.style.border = "1px solid rgba(10,132,255,.45)";
+      input.style.boxShadow =
+        "0 0 18px rgba(10,132,255,.18)";
+    };
+
+    input.onblur = () => {
+      input.style.border = "1px solid rgba(255,255,255,.08)";
+      input.style.boxShadow = "none";
+    };
+
     container.appendChild(input);
 
-    requestAnimationFrame(() => {
-      container.style.opacity = '1';
-      container.style.transform = 'translateX(-50%) translateY(0)';
+    const hint = document.createElement("div");
+
+    Object.assign(hint.style, {
+      position: "relative",
+      zIndex: "2",
+
+      opacity: ".55",
+
+      fontSize: "12px",
+
+      alignSelf: "flex-end",
     });
 
-    input.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter') {
+    hint.textContent = "Press Enter";
+
+    container.appendChild(hint);
+
+    if (!document.getElementById("glass-prompt-style")) {
+      const style = document.createElement("style");
+
+      style.id = "glass-prompt-style";
+
+      style.textContent = `
+        @keyframes glassPromptShine {
+          0% {
+            left: -120%;
+          }
+
+          100% {
+            left: 160%;
+          }
+        }
+
+        #prompt-container input::placeholder {
+          color: rgba(255,255,255,.38);
+        }
+      `;
+
+      document.head.appendChild(style);
+    }
+
+    requestAnimationFrame(() => {
+      container.style.opacity = "1";
+
+      container.style.transform =
+        "translateX(-50%) translateY(0) scale(1)";
+    });
+
+    input.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") {
         const val = input.value.trim();
 
-        container.style.opacity = '0';
-        container.style.transform = 'translateX(-50%) translateY(-30px)';
+        container.style.opacity = "0";
+
+        container.style.transform =
+          "translateX(-50%) translateY(-30px) scale(.96)";
+
         setTimeout(() => {
           container.remove();
-resolve(val || null);
-        }, 300);
+
+          resolve(val || null);
+        }, 350);
       }
     });
 
     input.focus();
   });
 }
-
-function saveTheme(theme) {
-    try {
-        localStorage.setItem("customMenuTheme", JSON.stringify(theme));
-        applyTheme(theme);
-    } catch (e) {}
-}
-
-function loadTheme() {
-    try {
-        const saved = localStorage.getItem("customMenuTheme");
-        if (saved) return JSON.parse(saved);
-    } catch (e) {}
-    return { name: "Default", primary: "#ff4444aa", toggled: "#660000", hover: "#ff6666" };
-}
   const categories = {};
-
-  const colors = [
-    { name: "Red", primary: "#c92323c4", toggled: "#660000", hover: "#ff6666" },
-    { name: "Orange", primary: "#ff8800", toggled: "#994d00", hover: "#ffb74d" },
-    { name: "Yellow", primary: "#ffeb3b", toggled: "#bfa600", hover: "#fff176" },
-    { name: "Light Green", primary: "#8bc34a", toggled: "#4d751f", hover: "#aed581" },
-    { name: "Green", primary: "#4caf50", toggled: "#2e7d32", hover: "#81c784" },
-    { name: "Dark Green", primary: "#2e7d32", toggled: "#1b4d1b", hover: "#4caf50" },
-    { name: "Light Blue", primary: "#03a9f4", toggled: "#01579b", hover: "#4fc3f7" },
-    { name: "Blue", primary: "#2196f3", toggled: "#0d47a1", hover: "#64b5f6" },
-    { name: "Dark Blue", primary: "#1565c0", toggled: "#0b3c75", hover: "#5e92f3" },
-    { name: "Purple", primary: "#9c27b0", toggled: "#4a0072", hover: "#ba68c8" },
-    { name: "Magenta", primary: "#e91e63", toggled: "#880e4f", hover: "#f06292" },
-    { name: "Beige", primary: "#f5f5dc", toggled: "#9e9e85", hover: "#fafafa" },
-    { name: "White", primary: "#ffffff", toggled: "#cccccc", hover: "#f0f0f0" },
-    { name: "Gray", primary: "#9e9e9e", toggled: "#616161", hover: "#bdbdbd" },
-  ];
-
-
-  function loadTheme() {
-    const saved = localStorage.getItem("customMenuTheme");
-    return saved ? JSON.parse(saved) : colors[0];
-  }
-  function applyTheme(theme) {
-    document.documentElement.style.setProperty("--primary", theme.primary);
-    document.documentElement.style.setProperty("--toggled", theme.toggled);
-    document.documentElement.style.setProperty("--hover", theme.hover);
-  }
 
 
 SendNotification("Welcome to karma.lol. Press ALT + GR to show/hide the menu.");
 
 function SendNotification(text) {
-  let container = document.getElementById('notification-container');
+  let container = document.getElementById("notification-container");
+
   if (!container) {
-    container = document.createElement('div');
-    container.id = 'notification-container';
+    container = document.createElement("div");
+    container.id = "notification-container";
+
     Object.assign(container.style, {
-      position: 'fixed',
-      bottom: '20px',
-      right: '20px',
-      display: 'flex',
-      flexDirection: 'column-reverse',
-      gap: '10px',
-      zIndex: '9999',
+      position: "fixed",
+      bottom: "20px",
+      right: "20px",
+      display: "flex",
+      flexDirection: "column-reverse",
+      gap: "12px",
+      zIndex: "9999999999",
+      pointerEvents: "none",
     });
+
     document.body.appendChild(container);
   }
 
-  const notif = document.createElement('div');
-  Object.assign(notif.style, {
-    background: 'rgba(0,0,0,0.9)',
-    color: '#fff',
-    padding: '12px 16px',
-    borderRadius: '8px',
-    fontFamily: '"Ndot57Caps", sans-serif',
-    fontSize: '14px',
-    minWidth: '220px',
-    boxShadow: '0 4px 12px rgba(0,0,0,0.4)',
-    position: 'relative',
-    overflow: 'hidden',
-    opacity: '0',
-    transform: 'translateY(20px)',
-    transition: 'opacity 0.3s ease, transform 0.3s ease',
-  });
-  notif.textContent = text;
+  const notif = document.createElement("div");
 
-  const bar = document.createElement('div');
-  Object.assign(bar.style, {
-    position: 'absolute',
-    bottom: '0',
-    left: '0',
-    height: '4px',
-    background: loadTheme().primary,
-    width: '100%',
-    transition: 'width 3s linear',
+  Object.assign(notif.style, {
+    position: "relative",
+    overflow: "hidden",
+
+    minWidth: "250px",
+    maxWidth: "340px",
+
+    padding: "14px 18px",
+
+    borderRadius: "16px",
+
+    background: `
+      linear-gradient(
+        180deg,
+        rgba(255,255,255,0.10),
+        rgba(255,255,255,0.04)
+      )
+    `,
+
+    border: "1px solid rgba(255,255,255,0.08)",
+
+    backdropFilter: "blur(24px)",
+    WebkitBackdropFilter: "blur(24px)",
+
+    boxShadow: `
+      0 10px 35px rgba(0,0,0,0.45),
+      inset 0 1px 0 rgba(255,255,255,0.05)
+    `,
+
+    color: "#fff",
+
+    fontFamily: `"Ndot57Caps", Inconsolata, sans-serif`,
+    fontSize: "14px",
+    fontWeight: "700",
+    letterSpacing: "0.3px",
+
+    opacity: "0",
+
+    transform: "translateY(20px) scale(0.96)",
+
+    transition: `
+      opacity .35s cubic-bezier(.2,.9,.2,1),
+      transform .35s cubic-bezier(.2,.9,.2,1)
+    `,
+
+    pointerEvents: "auto",
   });
+
+  const dim = document.createElement("div");
+
+  Object.assign(dim.style, {
+    position: "absolute",
+    inset: "0",
+
+    background: `
+      radial-gradient(
+        circle at top left,
+        rgba(10,132,255,.10),
+        transparent 40%
+      ),
+
+      radial-gradient(
+        circle at bottom right,
+        rgba(175,82,222,.08),
+        transparent 40%
+      ),
+
+      rgba(0,0,0,.34)
+    `,
+
+    pointerEvents: "none",
+  });
+
+  notif.appendChild(dim);
+
+  const shine = document.createElement("div");
+
+  Object.assign(shine.style, {
+    position: "absolute",
+    top: "0",
+    left: "-120%",
+
+    width: "70%",
+    height: "100%",
+
+    background: `
+      linear-gradient(
+        90deg,
+        transparent,
+        rgba(255,255,255,.12),
+        transparent
+      )
+    `,
+
+    transform: "skewX(-20deg)",
+
+    animation: "notifShine 3.5s linear infinite",
+
+    pointerEvents: "none",
+  });
+
+  notif.appendChild(shine);
+
+  const textEl = document.createElement("div");
+
+  Object.assign(textEl.style, {
+    position: "relative",
+    zIndex: "2",
+    lineHeight: "1.4",
+  });
+
+  textEl.textContent = text;
+
+  notif.appendChild(textEl);
+
+  const bar = document.createElement("div");
+
+  Object.assign(bar.style, {
+  position: "absolute",
+  left: "0",
+  bottom: "0",
+
+  width: "100%",
+  height: "4px",
+
+  background: "rgb(10,132,255)",
+
+  boxShadow: "0 0 12px rgba(10,132,255,0.7)",
+
+  transformOrigin: "left center",
+
+  transition: "transform 3s linear",
+
+  zIndex: "3",
+});
+
   notif.appendChild(bar);
+
+  const topGlow = document.createElement("div");
+
+  Object.assign(topGlow.style, {
+    position: "absolute",
+    top: "0",
+    left: "0",
+
+    width: "100%",
+    height: "1px",
+
+    background: "rgba(255,255,255,.18)",
+
+    zIndex: "2",
+  });
+
+  notif.appendChild(topGlow);
+
+  if (!document.getElementById("notif-glass-style")) {
+    const style = document.createElement("style");
+    style.id = "notif-glass-style";
+
+    style.textContent = `
+      @keyframes notifShine {
+        0% {
+          left: -120%;
+        }
+
+        100% {
+          left: 160%;
+        }
+      }
+    `;
+
+    document.head.appendChild(style);
+  }
+
   container.appendChild(notif);
 
   requestAnimationFrame(() => {
-    notif.style.opacity = '1';
-    notif.style.transform = 'translateY(0)';
-    bar.style.width = '0%';
+    notif.style.opacity = "1";
+    notif.style.transform = "translateY(0) scale(1)";
+
+    requestAnimationFrame(() => {
+      bar.style.transform = "scaleX(0)";
+    });
   });
 
   let animationActive = true;
+
   const updateColor = () => {
-    if (!animationActive) return;
-    bar.style.background = loadTheme().primary;
-    requestAnimationFrame(updateColor);
-  };
+  if (!animationActive) return;
+
+  const themeColor = "rgb(10,132,255)";
+
+  bar.style.background = themeColor;
+  bar.style.boxShadow = `0 0 12px ${themeColor}`;
+
+  requestAnimationFrame(updateColor);
+};
+
   requestAnimationFrame(updateColor);
 
   setTimeout(() => {
-    notif.style.opacity = '0';
-    notif.style.transform = 'translateY(20px)';
+    notif.style.opacity = "0";
+    notif.style.transform = "translateY(18px) scale(.96)";
+
     animationActive = false;
-    setTimeout(() => notif.remove(), 300);
+
+    setTimeout(() => {
+      notif.remove();
+
+      if (!container.children.length) {
+        container.remove();
+      }
+    }, 350);
   }, 3000);
 }
 let _antiBanDisable = null;
@@ -420,10 +743,6 @@ return;
         SendNotification(`Sent an ${chosen}` + " distraction.");
   }
 
-  function reactHandler() {
-        return Object.values(document.querySelector('#app>div>div'))[1].children[0]._owner;
-  }
-
   let fishingDistractionInterval;
   let originalParty = null;
 
@@ -472,7 +791,6 @@ return;
       };
 
       const stateNode = findReactNode();
-      if (!stateNode) return;
 
       const input = await SendPrompt("What would you like to set your lure to? (1 - 5)");
       const clamped = Math.max(Math.min((parseInt(input) || 0) - 1, 4), 0);
@@ -597,69 +915,7 @@ function extractHackedName() {
     return el.textContent.replace(/\bHACKING\b[:\s-]*/i, '').trim() || null;
 }
 
-let testDisable = null;
 
-function testasdasd(toggle) {
-    let interval = null;
-
-    const encodedChars = [
-        '\\u2f9f', '\\u4fff', '\\u4f52', '\\u0E47', '\\u0E47', '\\u0E47', '\\u0E47', '\\u0E47', '\\u0E47', '\\u0E47', '\\u4FF1', '\\u4FF2'
-    ];
-    const chars = encodedChars.map(c => eval(`"${c}"`));
-
-    function makeLongText() {
-        return new Array(3e6).fill().map(() => chars[Math.floor(Math.random() * chars.length)]).join("");
-    }
-
-    function getStateNode() {
-        let el = document.querySelector("body>div");
-        while (el) {
-            const node = Object.values(el)[1]?.children?.[0]?._owner?.stateNode;
-            if (node) return node;
-            el = el.querySelector(":scope>div");
-        }
-        return null;
-    }
-
-    function run() {
-        const stateNode = getStateNode();
-        if (!stateNode) return;
-
-        const repeatedText = makeLongText();
-
-        stateNode.props.client.blook = repeatedText;
-        stateNode.props.liveGameController.setVal({
-            path: `c/${stateNode.props.client.name}/b`,
-            val: repeatedText
-        });
-    }
-
-    if (toggle) {
-        if (testDisable) return;
-
-        run();
-        interval = setInterval(run, 25);
-
-        testDisable = () => {
-            clearInterval(interval);
-            interval = null;
-
-            const stateNode = getStateNode();
-            if (stateNode) {
-                stateNode.props.client.blook = "";
-                stateNode.props.liveGameController.setVal({
-                    path: `c/${stateNode.props.client.name}/b`,
-                    val: ""
-                });
-            }
-
-            testDisable = null;
-        };
-
-    } else if (testDisable) {
-        testDisable();
-    }
-}
 
 
 function CryptoCheat(toggle) {
@@ -1749,9 +2005,8 @@ var fvals = {
 	Factory: "ca",
 };
 
-
   async function setWeight() {
-                let amount = await SendPrompt("What would you like to set your weight to?");
+    let amount = parseInt(await SendPrompt("What would you like to set your weight to?"), 0);
                 var t = Object.values(document.querySelector("body div[id] > div > div"))[1].children[0]._owner.stateNode;
                 t.setState({
                     weight: amount,
@@ -1767,7 +2022,7 @@ var fvals = {
             }
 
               async function setGold() {
-                let amount = await SendPrompt("What would you like to set your gold to?");
+                let amount = parseInt(await SendPrompt("What would you like to set your gold to?"), 0);
                 var t = Object.values(document.querySelector("body div[id] > div > div"))[1].children[0]._owner.stateNode;
                 t.setState({
                     gold: amount,
@@ -1782,14 +2037,14 @@ var fvals = {
             }
 
             async function setCrypto() {
-                let amount = await SendPrompt("What would you like to set your crypto to?");
+                let amount = parseInt(await SendPrompt("What would you like to set your crypto to?"), 0);
                 var t = Object.values(document.querySelector("body div[id] > div > div"))[1].children[0]._owner.stateNode;
                 t.setState({
                     crypto: amount,
                     crypto2: amount
                 }), t.props.liveGameController.setVal({
                     path: "c/" + t.props.client.name + "/cr",
-                    val: e
+                    val: amount,
                 })
             }
 
@@ -1857,196 +2112,558 @@ var fvals = {
   }
 
   const style = document.createElement("style");
-  style.textContent = `
-    #customModContainer {
-      position: fixed;
-      top: 48%;
-      left: 50%;
-      transform: translate(-50%, -50%) scale(1.2);
-      background: #222;
-      color: white;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      border-radius: 12px;
-      width: 540px;
-      height: 340px;
-      display: flex;
-      flex-direction: column;
-      box-shadow: 0 0 15px var(--primary, #ff0000aa);
-      z-index: 9999999999;
-      overflow: hidden;
-      animation: fadeInScale 0.25s ease forwards;
-      user-select: none;
-      font-family: 'Ndot57Caps', Inconsolata,Helvetica,monospace,sans-serif;
-    }
-    #customModContainer.closing {
-      animation: fadeOutScale 0.28s forwards;
-    }
-    #customModContainer.minimizing {
-      animation: minimizeAnim 0.35s forwards;
-    }
-    #customModContainer.maximizing {
-      animation: maximizeAnim 0.35s forwards;
-    }
-    #customModHeader {
-      background: var(--primary, #ff4444aa);
-      padding: 10px;
-      font-size: 16px;
-      font-weight: 700;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      color: #222;
-      font-family: 'Ndot57Caps', Inconsolata,Helvetica,monospace,sans-serif;
-    }
-    #customHeaderButtons button {
-      background: none;
-      border: none;
-      font-size: 18px;
-      font-weight: bold;
-      cursor: pointer;
-      color: #222;
-      margin-left: 6px;
-      font-family: 'Ndot57Caps', Inconsolata,Helvetica,monospace,sans-serif;
-    }
-    #customHeaderButtons button:hover {
-      color: white;
-    }
-    #customMain {
-      flex: 1;
-      display: flex;
-      overflow: hidden;
-    }
-    #customSidebar {
-      background: #111;
-      padding: 12px;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      border-right: 2px solid var(--primary, #ff4444aa);
-      width: 150px;
-      max-height: 100%;
-      overflow-y: auto; 
-      box-sizing: border-box;
-      font-family: 'Ndot57Caps', Inconsolata,Helvetica,monospace,sans-serif;
-    }
-    #customSidebar button {
-      background: var(--primary, #ff4444aa);
-      border: none;
-      color: #111;
-      font-weight: 700;
-      padding: 8px;
-      border-radius: 8px;
-      cursor: pointer;
-      text-align: center;
-      transition: background 0.2s, color 0.2s;
-      font-family: 'Ndot57Caps', Inconsolata,Helvetica,monospace,sans-serif;
-    }
-    #customSidebar button.active {
-      background: var(--toggled, #660000);
-      color: white;
-    }
-    #customSidebar button:hover {
-      background: var(--hover, #ff6666);
-    }
-    #customModContent {
-      flex: 1;
-      padding: 16px;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      overflow-y: auto;
-      box-sizing: border-box;
-      font-family: 'Ndot57Caps', Inconsolata,Helvetica,monospace,sans-serif;
-    }
-    .modButtonGroup {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-    #customModContent button {
-      background: var(--primary, #ff4444aa);
-      border: none;
-      color: #222;
-      font-weight: 700;
-      padding: 10px;
-      border-radius: 10px;
-      cursor: pointer;
-      transition: background 0.2s, color 0.2s;
-      text-align: left;
-      font-family: 'Ndot57Caps', Inconsolata,Helvetica,monospace,sans-serif;
-    }
-    #customModContent button:hover {
-      background: var(--hover, #ff6666);
-    }
-    #customModContent button.toggle-active {
-      background: var(--toggled, #660000);
-      color: white;
-    }
-    #customModMinimized {
-      position: fixed;
-      top: 12px;              
-      right: 12px;
-      padding: 6px 10px;      
-      background: #111;       
-      color: white;
-      display: none;
-      flex-direction: row;    
-      justify-content: center;
-      align-items: center;
-      gap: 8px;               
-      border-radius: 10px;
-      z-index: 9999999999;
-      box-shadow: 0 0 8px rgba(0,0,0,0.6);
-      font-family: 'Ndot57Caps', Inconsolata,Helvetica,monospace,sans-serif;
-    }
-    #customModMinimized button {
-      background: none;
-      border: none;
-      color: white;
-      font-size: 20px;
-      font-weight: bold;
-      cursor: pointer;
-      padding: 2px 6px;
-      transition: color 0.2s ease;
-      font-family: 'Ndot57Caps', Inconsolata,Helvetica,monospace,sans-serif;
-    }
-    #customModMinimized button:hover {
-      color: var(--hover, #ff6666);
-    }
-    #customSidebar, #customModContent {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-  background-color: #111;
+
+style.textContent = `
+
+:root{
+    --primary: rgb(10,132,255);
+
+    --glass:
+        linear-gradient(
+            180deg,
+            rgba(255,255,255,.10),
+            rgba(255,255,255,.04)
+        );
+
+    --glass-strong:
+        linear-gradient(
+            180deg,
+            rgba(255,255,255,.14),
+            rgba(255,255,255,.06)
+        );
+
+    --glass-border: rgba(255,255,255,.08);
+
+    --glass-shadow:
+        0 10px 35px rgba(0,0,0,.45),
+        inset 0 1px 0 rgba(255,255,255,.05);
+
+    --blur: blur(24px);
+}
+
+#customModContainer {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+
+    transform: translate(-50%, -50%) scale(1);
+
+    background:
+        linear-gradient(
+            180deg,
+            rgba(255,255,255,.10),
+            rgba(255,255,255,.04)
+        );
+
+    color: #fff;
+
+    border-radius: 18px;
+
+    width: 560px;
+    height: 360px;
+
+    display: flex;
+    flex-direction: column;
+
+    box-shadow: var(--glass-shadow);
+
+    border: 1px solid var(--glass-border);
+
+    backdrop-filter: var(--blur);
+    -webkit-backdrop-filter: var(--blur);
+
+    z-index: 9999999999;
+
+    overflow: hidden;
+
+    animation: v3FadeIn .35s cubic-bezier(.2,.8,.2,1) forwards;
+
+    user-select: none;
+
+    font-family:
+        'Ndot57Caps',
+        Inconsolata,
+        Helvetica,
+        monospace,
+        sans-serif;
+}
+
+#customModContainer::before{
+    content: "";
+
+    position: absolute;
+    inset: 0;
+
+    background:
+        radial-gradient(
+            circle at top left,
+            rgba(10,132,255,.10),
+            transparent 40%
+        ),
+
+        radial-gradient(
+            circle at bottom right,
+            rgba(175,82,222,.08),
+            transparent 40%
+        ),
+
+        rgba(255,255,255,.02);
+
+    pointer-events: none;
+
+    z-index: 0;
+}
+
+#customModContainer::after{
+    content: "";
+
+    position: absolute;
+    top: 0;
+    left: -120%;
+
+    width: 70%;
+    height: 100%;
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            rgba(255,255,255,.08),
+            transparent
+        );
+
+    transform: skewX(-20deg);
+
+    animation: panelShine 4s linear infinite;
+
+    pointer-events: none;
+
+    z-index: 1;
+}
+
+#customModContainer > *{
+    position: relative;
+    z-index: 2;
+}
+
+#customModContainer.closing {
+    animation: v3FadeOut .28s ease forwards;
+}
+
+#customModContainer.minimizing {
+    animation: v3Minimize .35s ease forwards;
+}
+
+#customModContainer.maximizing {
+    animation: v3Maximize .35s ease forwards;
+}
+
+
+#customModHeader {
+    background:
+        linear-gradient(
+            180deg,
+            rgba(0,0,0,.22),
+            rgba(0,0,0,.12)
+        );
+
+    border-bottom: 1px solid rgba(255,255,255,.06);
+
+    padding: 12px 16px;
+
+    font-size: 15px;
+    font-weight: 800;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    color: #fff;
+
+    letter-spacing: 1px;
+
+    backdrop-filter: blur(18px);
+}
+
+
+#customHeaderButtons button {
+    background:
+        linear-gradient(
+            180deg,
+            rgba(0,0,0,.22),
+            rgba(0,0,0,.12)
+        );
+
+    border: 1px solid rgba(255,255,255,.08);
+
+    width: 30px;
+    height: 30px;
+
+    border-radius: 10px;
+
+    font-size: 15px;
+    font-weight: bold;
+
+    cursor: pointer;
+
+    color: #fff;
+
+    margin-left: 8px;
+
+    transition:
+        transform .18s ease,
+        background .2s ease,
+        box-shadow .2s ease;
+}
+
+#customHeaderButtons button:hover {
+    transform: scale(1.06);
+
+    background:
+        linear-gradient(
+            180deg,
+            rgba(255,255,255,.20),
+            rgba(255,255,255,.08)
+        );
+
+    box-shadow:
+        0 0 16px rgba(255,255,255,.08);
+}
+
+
+#customMain {
+    flex: 1;
+    display: flex;
+    overflow: hidden;
+}
+
+
+#customSidebar {
+    width: 160px;
+
+    padding: 14px 12px;
+
+    display: flex;
+    flex-direction: column;
+
+    gap: 10px;
+
+    background:
+        linear-gradient(
+            180deg,
+            rgba(0,0,0,.22),
+            rgba(0,0,0,.12)
+        );
+
+    border-right: 1px solid rgba(255,255,255,.05);
+
+    overflow-y: auto;
+}
+
+
+#customSidebar button {
+    background:
+        linear-gradient(
+            180deg,
+            rgba(0,0,0,.22),
+            rgba(0,0,0,.12)
+        );
+
+    border: 1px solid rgba(255,255,255,.07);
+
+    color: #fff;
+
+    font-weight: 700;
+
+    padding: 10px;
+
+    border-radius: 12px;
+
+    cursor: pointer;
+
+    text-align: center;
+
+    transition:
+        transform .18s ease,
+        background .2s ease,
+        box-shadow .2s ease;
+}
+
+
+#customSidebar button:hover {
+    transform: translateY(-1px);
+
+    background:
+        linear-gradient(
+            180deg,
+            rgba(121, 121, 121, 0.27),
+            rgba(88, 88, 88, 0.12)
+        );
+}
+
+#customSidebar button.active {
+    background:
+        linear-gradient(
+            180deg,
+            rgba(10,132,255,.28),
+            rgba(10,132,255,.12)
+        );
+
+    box-shadow:
+        0 0 18px rgba(10,132,255,.18);
+}
+
+#customModHeader .title {
+    font-weight: 800;
+    color: #fff;
+
+    background: linear-gradient(
+        90deg,
+        rgba(104, 104, 104, 1),
+        #0058b1ff,
+        rgba(104, 104, 104, 1)
+    );
+    background-size: 300% 300%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+
+    animation: titleGradientMove 4s ease infinite;
+}
+
+@keyframes titleGradientMove {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+
+#customModContent {
+
+background:
+        linear-gradient(
+            180deg,
+            rgba(0,0,0,.22),
+            rgba(0,0,0,.12)
+        );
+    flex: 1;
+
+    padding: 18px;
+
+    display: flex;
+    flex-direction: column;
+
+    gap: 12px;
+
+    overflow-y: auto;
+}
+
+#customModContent .modButtonGroup {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+
+#customModContent button {
+    background:
+        linear-gradient(
+            180deg,
+            rgba(0,0,0,.22),
+            rgba(0,0,0,.12)
+        );
+
+    border: 1px solid rgba(255,255,255,.07);
+
+    color: #fff;
+
+    font-weight: 700;
+
+    padding: 12px;
+
+    border-radius: 12px;
+
+    cursor: pointer;
+
+    text-align: left;
+
+    transition:
+        transform .18s ease,
+        background .2s ease,
+        box-shadow .2s ease;
+}
+
+#customModContent button:hover {
+    transform: translateY(-1px);
+
+    background:
+        linear-gradient(
+            180deg,
+            rgba(10,132,255,.20),
+            rgba(10,132,255,.08)
+        );
+
+    box-shadow:
+        0 0 16px rgba(10,132,255,.14);
+}
+
+#customModContent button.toggle-active {
+    background:
+        linear-gradient(
+            180deg,
+            rgba(48,209,88,.26),
+            rgba(48,209,88,.12)
+        );
+
+    box-shadow:
+        0 0 16px rgba(48,209,88,.14);
+}
+
+
+#customModMinimized {
+    position: fixed;
+
+    top: 14px;
+    right: 14px;
+
+    padding: 8px 12px;
+
+    background:
+        linear-gradient(
+            180deg,
+            rgba(0,0,0,.22),
+            rgba(0,0,0,.12)
+        );
+
+    backdrop-filter: blur(24px);
+
+    border: 1px solid rgba(255,255,255,.08);
+
+    color: #fff;
+
+    display: none;
+
+    align-items: center;
+    gap: 10px;
+
+    border-radius: 14px;
+
+    z-index: 9999999999;
+
+    box-shadow:
+        0 10px 35px rgba(0,0,0,.45);
+}
+
+#customModMinimized button {
+    background: none;
+    border: none;
+
+    color: #fff;
+
+    font-size: 22px;
+    font-weight: bold;
+
+    cursor: pointer;
+
+    transition:
+        transform .18s ease,
+        opacity .18s ease;
+}
+
+#customModMinimized button:hover {
+    transform: scale(1.08);
+    opacity: .9;
+}
+
+
+#customSidebar,
+#customModContent {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
 }
 
 #customSidebar::-webkit-scrollbar,
 #customModContent::-webkit-scrollbar {
-  display: none;
-  width: 0;
-  height: 0;
-  background-color: #111;
+    display: none;
 }
 
-    @keyframes minimizeAnim {
-      0%   { opacity: 1; transform: translate(-50%, -50%) scale(1.2); }
-      100% { opacity: 0; transform: translate(200%, -200%) scale(0.3); }
-    }
-    @keyframes maximizeAnim {
-      0%   { opacity: 0; transform: translate(200%, -200%) scale(0.3); }
-      100% { opacity: 1; transform: translate(-50%, -50%) scale(1.2); }
-    }
-    @keyframes fadeInScale {
-      0% { opacity: 0; transform: translate(-50%, -50%) scale(1.4); }
-      100% { opacity: 1; transform: translate(-50%, -50%) scale(1.2); }
-    }
-    @keyframes fadeOutScale {
-      0% { opacity: 1; transform: translate(-50%, -50%) scale(1.2); }
-      100% { opacity: 0; transform: translate(-50%, -50%) scale(1.4); }
-    }
-  `;
 
+@keyframes panelShine {
+    0% {
+        left: -120%;
+    }
 
-  document.head.appendChild(style);
+    100% {
+        left: 160%;
+    }
+}
+
+@keyframes v3FadeIn {
+    from {
+        opacity: 0;
+        transform:
+            translate(-50%, -50%)
+            scale(.92);
+    }
+
+    to {
+        opacity: 1;
+        transform:
+            translate(-50%, -50%)
+            scale(1);
+    }
+}
+
+@keyframes v3FadeOut {
+    from {
+        opacity: 1;
+        transform:
+            translate(-50%, -50%)
+            scale(1);
+    }
+
+    to {
+        opacity: 0;
+        transform:
+            translate(-50%, -50%)
+            scale(.92);
+    }
+}
+
+@keyframes v3Minimize {
+    from {
+        opacity: 1;
+        transform:
+            translate(-50%, -50%)
+            scale(1);
+    }
+
+    to {
+        opacity: 0;
+        transform:
+            translate(150%, -150%)
+            scale(.3);
+    }
+}
+
+@keyframes v3Maximize {
+    from {
+        opacity: 0;
+        transform:
+            translate(150%, -150%)
+            scale(.3);
+    }
+
+    to {
+        opacity: 1;
+        transform:
+            translate(-50%, -50%)
+            scale(1);
+    }
+}
+`;
+
+document.head.appendChild(style);
 
   const container = document.createElement("div");
   container.id = "customModContainer";
@@ -2054,12 +2671,12 @@ var fvals = {
   const header = document.createElement("div");
   header.id = "customModHeader";
   header.innerHTML = `
-    <span>karma.lol</span>
-    <div id="customHeaderButtons">
-      <button id="customDragBtn">✥</button>
-      <button id="customMinimizeBtn">−</button>
-      <button id="customCloseBtn">×</button>
-    </div>`;
+  <span class="title">karma.lol</span>
+  <div id="customHeaderButtons">
+    <button id="customDragBtn">✥</button>
+    <button id="customMinimizeBtn">−</button>
+    <button id="customCloseBtn">×</button>
+  </div>`;
     
 
   const mainWrapper = document.createElement("div");
@@ -2230,18 +2847,33 @@ searchResults.style.cssText += `
 
   let filteredBtns = [];
 
-  if (!query)
-  {
-    return;}
-    else {
+  if (!query) {
+    searchResults.innerHTML = "";
+    return;
+  } else {
     filteredBtns = allBtns.filter(btn =>
       btn.textContent.toLowerCase().includes(query.toLowerCase())
     );
   }
 
   searchResults.innerHTML = "";
-  filteredBtns.forEach(btn => searchResults.appendChild(btn));
+  filteredBtns.forEach(btn => {
+  const clone = btn.cloneNode(true);
+
+  const categoryKey = Object.keys(categories).find(cat =>
+    categories[cat].buttons.includes(btn)
+  );
+
+  const categoryLabel = categories[categoryKey]?.label || categoryKey;
+
+  clone.textContent = `${btn.textContent} (${categoryLabel})`;
+
+  searchResults.appendChild(clone);
+});
+
+
 }
+
 
     searchInput.addEventListener("input", e => {
       renderSearchResults(e.target.value.trim());
@@ -2286,6 +2918,58 @@ function toggleMenu(toggle) {
 
         _menuHidden = false;
     }
+}
+
+let freezeInterval = null;
+let _freezeDisable;
+
+function toggleFreeze(toggle) {
+    if (!toggle) {
+        _freezeDisable();
+        return;
+    }
+
+    if (freezeInterval) return;
+
+    const encodedChars = [
+        '\\u2f9f', '\\u4fff', '\\u4f52',
+        '\\u0E47', '\\u0E47', '\\u0E47',
+        '\\u0E47', '\\u0E47', '\\u0E47',
+        '\\u0E47', '\\u4FF1', '\\u4FF2'
+    ];
+    const chars = encodedChars.map(char => eval(`"${char}"`));
+
+    function makeLongText() {
+        return new Array(3e6)
+            .fill()
+            .map(() => chars[Math.floor(Math.random() * chars.length)])
+            .join("");
+    }
+
+    let { props: t } = Object.values(function e(t = document.querySelector("body>div")) {
+        return Object.values(t)[1]?.children?.[0]?._owner.stateNode
+            ? t
+            : e(t.querySelector(":scope>div"));
+    }())[1].children[0]._owner.stateNode;
+
+    freezeInterval = setInterval(() => {
+        const repeatedText = makeLongText();
+
+        t.client.blook = repeatedText;
+
+        t.liveGameController.setVal({
+            path: `c/${t.client.name}/b`,
+            val: repeatedText
+        });
+    }, 0);
+
+    _freezeDisable = () => {
+        if (freezeInterval) {
+            clearInterval(freezeInterval);
+            freezeInterval = null;
+        }
+        _freezeDisable = () => {};
+    };
 }
 
 function markMenuMinimized() {
@@ -2342,21 +3026,6 @@ document.addEventListener("keydown", (e) => {
   button.add("Set Player Gold").category("goldquest").method = () => setPlayerGold();
   button.add("Swap Gold").category("goldquest").method = () => swapGoldWithPlayer();
 
-  let savedTheme = loadTheme();
-  let currentColorIndex = colors.findIndex(c => c.primary === savedTheme.primary);
-  if (currentColorIndex === -1) currentColorIndex = 0;
-
-  const colorButton = document.createElement("button");
-colorButton.textContent = "Theme: " + savedTheme.name;
-colorButton.onclick = () => {
-    currentColorIndex = (currentColorIndex + 1) % colors.length;
-    const selected = colors[currentColorIndex];
-    saveTheme(selected);
-    applyTheme(selected);
-    colorButton.textContent = "Theme: " + selected.name;
-};
-categories["settings"].buttons.push(colorButton);
-  applyTheme(savedTheme);
 
   button.add("Check For Updates").category("settings").method = () => CheckForUpdates();
 
@@ -2442,8 +3111,6 @@ categories["settings"].buttons.push(colorButton);
     }
   } catch (e) {}
 
-
-  try { localStorage.removeItem("customMenuTheme"); } catch (e) {}
 
   try { document.removeEventListener("keydown", shiftToggleHandler); } catch (e) {}
 
@@ -2538,11 +3205,6 @@ try { subtleToggleDisable(); } catch(e) {}
         };
     };
 }
-
-
-if (currentColorIndex === -1) currentColorIndex = 0;
-applyTheme(savedTheme);
-colorButton.textContent = "Theme: " + savedTheme.name;
 
     dragElement(dragBtn, container);
 
