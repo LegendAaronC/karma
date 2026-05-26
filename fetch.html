@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Fetch</title>
+<script>
+window.addEventListener("message", async (event) => {
+  if (!event.source || event.source !== window.opener) return;
+  const { id, url, options } = event.data || {};
+  if (!id || !url) return;
+
+  try {
+    const res = await fetch(url, options || {});
+    const text = await res.text();
+    event.source.postMessage({ id, ok: res.ok, status: res.status, body: text }, event.origin);
+  } catch (err) {
+    event.source.postMessage({ id, ok: false, status: 0, error: String(err) }, event.origin);
+  }
+
+  window.close();
+});
+</script>
+</head>
+<body>Do NOT close this window.</body>
+</html>
