@@ -4,20 +4,24 @@
 <meta charset="UTF-8">
 <title>Fetch</title>
 <script>
-window.addEventListener("message", async (event) => {
-  if (!event.source || event.source !== window.opener) return;
-  const { id, url, options } = event.data || {};
-  if (!id || !url) return;
+window.addEventListener("load", () => {
+  if (window.opener) window.opener.postMessage({ ready: true }, "*");
 
-  try {
-    const res = await fetch(url, options || {});
-    const text = await res.text();
-    event.source.postMessage({ id, ok: res.ok, status: res.status, body: text }, event.origin);
-  } catch (err) {
-    event.source.postMessage({ id, ok: false, status: 0, error: String(err) }, event.origin);
-  }
+  window.addEventListener("message", async (event) => {
+    if (!event.source || event.source !== window.opener) return;
+    const { id, url, options } = event.data || {};
+    if (!id || !url) return;
 
-  window.close();
+    try {
+      const res = await fetch(url, options || {});
+      const text = await res.text();
+      event.source.postMessage({ id, ok: res.ok, status: res.status, body: text }, event.origin);
+    } catch (err) {
+      event.source.postMessage({ id, ok: false, status: 0, error: String(err) }, event.origin);
+    }
+
+    window.close();
+  });
 });
 </script>
 </head>
