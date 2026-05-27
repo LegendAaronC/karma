@@ -1,4 +1,10 @@
 javascript:(async function () {
+  if (window._menuOpen === undefined) {
+    window._menuOpen = true;
+  }
+  else {
+    return;
+  }
   const version = "3.0.0";
 (function injectFont() { const style = document.createElement("style"); style.textContent = ` @font-face { font-family: "Ndot57Caps"; src: url("https://ac.blooket.com/play-frontend/208b500eaf6a02de6236333d99331a18ce8c8e84/_next/static/media/ee40bb094c99a29a-s.p.woff2") format("opentype"); font-weight: normal; font-style: normal; font-display: swap; } `; document.head.appendChild(style); })();
 async function SendPrompt(message) {
@@ -3125,6 +3131,7 @@ document.addEventListener("keydown", (e) => {
   try { delete window.highlightAnswers; } catch (e) {}
   try { delete window.__blooketHelpers; } catch (e) {}
   try { delete window.__customModMenuCleanupRan; } catch (e) {}
+  try { delete window._menuOpen; } catch (e) {}
 
   try { originalAnswers && originalAnswers.clear && originalAnswers.clear(); } catch (e) {}
   try { (categories && typeof categories === "object") && Object.keys(categories).forEach(k => delete categories[k]); } catch (e) {}
